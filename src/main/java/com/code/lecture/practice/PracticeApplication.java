@@ -6,6 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootApplication
 public class PracticeApplication implements CommandLineRunner {
     @Autowired
@@ -30,6 +33,14 @@ public class PracticeApplication implements CommandLineRunner {
 
 	}
 
+    /**
+     * to get all instances of the bean created
+     * @param args
+     * @throws Exception
+     */
+    @Autowired
+    Map<String,NotificationService> notificationServiceMapObj = new HashMap<>();
+
     @Override
     public void run(String... args) throws Exception {
         paymentService.pay();
@@ -37,5 +48,10 @@ public class PracticeApplication implements CommandLineRunner {
         System.out.println(msg);
 
         notificationService.send("Verified");
+
+        for(var notificationService : notificationServiceMapObj.entrySet()){
+            System.out.println(notificationService.getKey());
+            notificationService.getValue().send("CODE");
+        }
     }
 }
