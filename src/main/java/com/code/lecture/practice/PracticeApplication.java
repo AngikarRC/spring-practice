@@ -23,7 +23,7 @@ public class PracticeApplication implements CommandLineRunner {
      * constructor dependency injection - most preferred in prod
      * no @Autowired need
      */
-    public PracticeApplication(@Qualifier("email") NotificationService notificationService){
+    public PracticeApplication(NotificationService notificationService){
         this.notificationService = notificationService;
     }
 
@@ -37,9 +37,10 @@ public class PracticeApplication implements CommandLineRunner {
      * to get all instances of the bean created
      * @param args
      * @throws Exception
-     */
+     *
     @Autowired
     Map<String,NotificationService> notificationServiceMapObj = new HashMap<>();
+     */
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,10 +49,10 @@ public class PracticeApplication implements CommandLineRunner {
         System.out.println(msg);
 
         notificationService.send("Verified");
-
+        /*
         for(var notificationService : notificationServiceMapObj.entrySet()){
             System.out.println(notificationService.getKey());
             notificationService.getValue().send("CODE");
-        }
+        } */
     }
 }
