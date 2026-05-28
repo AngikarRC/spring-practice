@@ -1,5 +1,6 @@
-package com.code.lecture.practice;
+package com.code.lecture.practice.config;
 
+import com.code.lecture.practice.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

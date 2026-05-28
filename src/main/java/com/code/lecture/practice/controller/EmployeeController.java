@@ -1,17 +1,27 @@
 package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
+import com.code.lecture.practice.entity.EmployeeEntity;
+import com.code.lecture.practice.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/employee")
 public class EmployeeController {
 
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+
     @GetMapping("/{employeeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id){
-        return new EmployeeDTO(id,"Arc",237373d,"arc12@gamil.com", LocalDate.of(2022,1,21));
+    public EmployeeDTO fetchEmployeeById(@PathVariable(name = "employeeId") Long id){
+        return employeeService.getEmployeeById(id);
     }
 
     /**
@@ -21,8 +31,13 @@ public class EmployeeController {
      */
 
     @GetMapping
-    public String getAllEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
-                                  @RequestParam(required = false) String sortBy){
-        return "hi, "+age + sortBy;
+    public List<EmployeeDTO> fetchAllEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
+                                                  @RequestParam(required = false) String sortBy){
+        return employeeService.getAllEmployees();
+    }
+
+    @PostMapping
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
+        return employeeService.createEmployee(employeeDTO);
     }
 }
