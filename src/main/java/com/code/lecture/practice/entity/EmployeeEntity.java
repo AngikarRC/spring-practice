@@ -18,5 +18,5 @@ public class EmployeeEntity {
     private Integer age;
     private LocalDate doj;
     private Double salary;
-    private boolean isActive;
+    private boolean active;
 }

@@ -12,6 +12,7 @@ public class EmployeeDTO {
     private Double salary;
     private String email;
     private LocalDate doj;
+    private boolean active;
 
 
 }
