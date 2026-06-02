@@ -2,7 +2,6 @@ package com.code.lecture.practice.dto;
 
 
 import lombok.Data;
-import tools.jackson.databind.node.DoubleNode;
 
 import java.time.LocalDate;
 @Data

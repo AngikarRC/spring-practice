@@ -1,11 +1,9 @@
 package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
-import com.code.lecture.practice.entity.EmployeeEntity;
 import com.code.lecture.practice.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -44,5 +42,9 @@ public class EmployeeController {
     public EmployeeDTO updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeid){
         return employeeService.updateEmployeeById(employeeDTO,employeeid);
 
+    }
+    @DeleteMapping("/{employeeId}")
+    public void deleteEmployeeById(@PathVariable Long employeeId){
+        employeeService.deleteEmployeeById(employeeId);
     }
 }

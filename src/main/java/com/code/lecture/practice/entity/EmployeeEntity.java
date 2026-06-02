@@ -2,7 +2,6 @@ package com.code.lecture.practice.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
 
 import java.time.LocalDate;
 

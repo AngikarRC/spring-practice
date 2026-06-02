@@ -1,6 +1,5 @@
 package com.code.lecture.practice.service;
 
-import com.code.lecture.practice.config.ModelMapperConfig;
 import com.code.lecture.practice.dto.EmployeeDTO;
 import com.code.lecture.practice.entity.EmployeeEntity;
 import com.code.lecture.practice.repositories.EmployeeRepository;
@@ -8,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -47,5 +45,17 @@ public class EmployeeService {
         employeeEntity.setId(employeeId);
         EmployeeEntity savedEntity = employeeRepository.save(employeeEntity);
         return modelMapper.map(employeeEntity,EmployeeDTO.class);
+    }
+
+    public boolean existsEmployeeById(Long employeeId){
+        return employeeRepository.existsById(employeeId);
+    }
+
+    public void deleteEmployeeById(Long employeeId) {
+        if (existsEmployeeById(employeeId)) {
+            employeeRepository.deleteById(employeeId);
+        }else {
+            System.out.println("Record not found");
+        }
     }
 }
