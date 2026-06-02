@@ -5,6 +5,7 @@ import com.code.lecture.practice.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="/employee")
@@ -46,5 +47,10 @@ public class EmployeeController {
     @DeleteMapping("/{employeeId}")
     public void deleteEmployeeById(@PathVariable Long employeeId){
         employeeService.deleteEmployeeById(employeeId);
+    }
+
+    @PatchMapping("/{employeeId}")
+    public EmployeeDTO updatePartialEmployeeById(@PathVariable Long employeeId, Map<String,Object>updates){
+        return employeeService.updatePartialEmployeeById(employeeId,updates);
     }
 }

@@ -6,7 +6,10 @@ import com.code.lecture.practice.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import org.springframework.util.ReflectionUtils;
 
 @Service
 public class EmployeeService {
@@ -57,5 +60,20 @@ public class EmployeeService {
         }else {
             System.out.println("Record not found");
         }
+    }
+
+
+    public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
+        if(!existsEmployeeById(employeeId)) return null;
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+        updates.forEach((field,value)->{
+                    Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class,field);
+                    fieldToBeUpdated.setAccessible(true);
+                    ReflectionUtils.setField(fieldToBeUpdated,employeeEntity,value);
+                }
+        );
+        EmployeeEntity savedEntity = employeeRepository.save(employeeEntity);
+        return modelMapper.map(employeeEntity,EmployeeDTO.class);
+
     }
 }
