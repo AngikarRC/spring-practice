@@ -2,6 +2,7 @@ package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
 import com.code.lecture.practice.service.EmployeeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,10 @@ public class EmployeeController {
 
 
     @GetMapping("/{employeeId}")
-    public EmployeeDTO fetchEmployeeById(@PathVariable(name = "employeeId") Long id){
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<EmployeeDTO> fetchEmployeeById(@PathVariable(name = "employeeId") Long id){
+        EmployeeDTO employeeDTO =  employeeService.getEmployeeById(id);
+        if(employeeDTO == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(employeeDTO);
     }
 
     /**
