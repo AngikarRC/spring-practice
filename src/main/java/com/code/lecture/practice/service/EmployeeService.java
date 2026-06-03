@@ -62,12 +62,12 @@ public class EmployeeService {
         return employeeRepository.existsById(employeeId);
     }
 
-    public void deleteEmployeeById(Long employeeId) {
-        if (existsEmployeeById(employeeId)) {
-            employeeRepository.deleteById(employeeId);
-        }else {
-            System.out.println("Record not found");
+    public boolean deleteEmployeeById(Long employeeId) {
+        if (!existsEmployeeById(employeeId)) {
+            return false;
         }
+        employeeRepository.deleteById(employeeId);
+        return true;
     }
 
 
