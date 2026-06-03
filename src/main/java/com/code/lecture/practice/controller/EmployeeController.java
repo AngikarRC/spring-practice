@@ -2,6 +2,7 @@ package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
 import com.code.lecture.practice.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +44,12 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO employeeDTO){
         EmployeeDTO savedEmp =  employeeService.createEmployee(employeeDTO);
         return new ResponseEntity<>(savedEmp, HttpStatus.CREATED);
     }
     @PutMapping("/{employeeid}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeid){
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid  EmployeeDTO employeeDTO, @PathVariable Long employeeid){
         EmployeeDTO savedEmp =  employeeService.updateEmployeeById(employeeDTO,employeeid);
         return new ResponseEntity<>(savedEmp,HttpStatus.OK);
 
