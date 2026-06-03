@@ -2,11 +2,13 @@ package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
 import com.code.lecture.practice.service.EmployeeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/employee")
@@ -21,9 +23,10 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<EmployeeDTO> fetchEmployeeById(@PathVariable(name = "employeeId") Long id){
-        EmployeeDTO employeeDTO =  employeeService.getEmployeeById(id);
-        if(employeeDTO == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(employeeDTO);
+        Optional<EmployeeDTO> empDTO = employeeService.getEmployeeById(id);
+        return empDTO
+                .map(employeeDTO -> ResponseEntity.ok(employeeDTO))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -33,14 +36,16 @@ public class EmployeeController {
      */
 
     @GetMapping
-    public List<EmployeeDTO> fetchAllEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
+    public ResponseEntity<List<EmployeeDTO>> fetchAllEmployees(@RequestParam(required = false, name = "inputAge") Integer age,
                                                   @RequestParam(required = false) String sortBy){
-        return employeeService.getAllEmployees();
+        List<EmployeeDTO> employeeDTOS =  employeeService.getAllEmployees();
+        return ResponseEntity.ok(employeeDTOS);
     }
 
     @PostMapping
-    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.createEmployee(employeeDTO);
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
+        EmployeeDTO savedEmp =  employeeService.createEmployee(employeeDTO);
+        return new ResponseEntity<>(savedEmp, HttpStatus.CREATED);
     }
     @PutMapping("/{employeeid}")
     public EmployeeDTO updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeid){
