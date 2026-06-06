@@ -1,6 +1,7 @@
 package com.code.lecture.practice.controller;
 
 import com.code.lecture.practice.dto.EmployeeDTO;
+import com.code.lecture.practice.exceptions.ResourceNotFoundException;
 import com.code.lecture.practice.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class EmployeeController {
         Optional<EmployeeDTO> empDTO = employeeService.getEmployeeById(id);
         return empDTO
                 .map(employeeDTO -> ResponseEntity.ok(employeeDTO))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(()->new ResourceNotFoundException("Employee with id : "+id+ "not found"));
     }
 
     /**
