@@ -6,31 +6,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex){
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException ex){
         ApiError apiError =
                         ApiError.builder()
                         .status(HttpStatus.NOT_FOUND)
                         .message(ex.getMessage())
                                 .build();
-        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(apiError);
     }
 
     //handle all RunTimeEcxeptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleInternalServerError(Exception ex){
+    public ResponseEntity<ApiResponse<?>> handleInternalServerError(Exception ex){
         ApiError apiError =
                 ApiError.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .message(ex.getMessage())
                         .build();
-        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorResponseEntity(apiError);
     }
 
     /**
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
      */
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleInputValidationErrors(MethodArgumentNotValidException ex){
+    public ResponseEntity<ApiResponse<?>> handleInputValidationErrors(MethodArgumentNotValidException ex){
 
         List<String> errors =
                 ex.getBindingResult().getAllErrors()
@@ -53,9 +54,12 @@ public class GlobalExceptionHandler {
                         .subErrors(errors)
                         .build();
 
-        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+        return buildErrorResponseEntity(apiError);
     }
 
+    private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError) {
+        return new ResponseEntity<>(new ApiResponse<>(apiError),apiError.getStatus());
 
+    }
 
 }
